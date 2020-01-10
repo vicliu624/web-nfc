@@ -25,7 +25,9 @@ import java.util.Map;
 public class Launcher {
 
     public static void main(String[] arg) throws Exception {
+        System.out.println("读卡器服务已开启");
         HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
+        System.out.println("http服务开启 端口8001");
         server.createContext("/reader", new ReaderHandler());
         server.start();
     }
