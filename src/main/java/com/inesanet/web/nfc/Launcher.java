@@ -2,16 +2,15 @@ package com.inesanet.web.nfc;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.*;
 
+import javax.net.ssl.*;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -26,9 +25,47 @@ public class Launcher {
 
     public static void main(String[] arg) throws Exception {
         System.out.println("读卡器服务已开启");
-        HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
+        HttpsServer server = HttpsServer.create(new InetSocketAddress(8001), 0);
+        SSLContext sslContext = SSLContext.getInstance("TLS");
         System.out.println("http服务开启 端口8001");
         server.createContext("/reader", new ReaderHandler());
+
+        char[] password = "simulator".toCharArray ();
+        KeyStore ks = KeyStore.getInstance ( "JKS" );
+        FileInputStream fis = new FileInputStream ( "./lig.keystore" );
+        ks.load ( fis, password );
+
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance ( "SunX509" );
+        kmf.init ( ks, password );
+
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance ( "SunX509" );
+        tmf.init ( ks );
+
+        sslContext.init ( kmf.getKeyManagers (), tmf.getTrustManagers (), null );
+
+        server.setHttpsConfigurator ( new HttpsConfigurator( sslContext )
+        {
+            public void configure ( HttpsParameters params )
+            {
+                try
+                {
+                    // initialise the SSL context
+                    SSLContext c = SSLContext.getDefault ();
+                    SSLEngine engine = c.createSSLEngine ();
+                    params.setNeedClientAuth ( false );
+                    params.setCipherSuites ( engine.getEnabledCipherSuites () );
+                    params.setProtocols ( engine.getEnabledProtocols () );
+
+                    // get the default parameters
+                    SSLParameters defaultSSLParameters = c.getDefaultSSLParameters ();
+                    params.setSSLParameters ( defaultSSLParameters );
+                }
+                catch ( Exception ex )
+                {
+                    System.out.println("Failed to create HTTPS port");
+                }
+            }
+        } );
         server.start();
     }
 

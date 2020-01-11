@@ -1,0 +1,1 @@
+keytool -genkey -alias alias -keypass simulator -keystore lig.keystore -storepass simulator

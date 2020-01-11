@@ -37,7 +37,10 @@ public class CardReader {
         }
     }
 
-    public void selectedCardTerminal(int index){
+    public void selectedCardTerminal(int index) throws Exception {
+        if(this.cardTerminals == null){
+            throw new Exception("读卡器未寻卡");
+        }
         this.selectedCardTerminal = this.cardTerminals.get(index);
     }
 
@@ -55,14 +58,20 @@ public class CardReader {
 
     public boolean isCardPresent() throws Exception{
         try {
+            if(this.selectedCardTerminal == null){
+                throw new Exception("当前未选择卡");
+            }
             return this.selectedCardTerminal.isCardPresent();
         } catch (CardException e) {
             throw new Exception(e.getMessage());
         }
     }
 
-    public ResponseAPDU transmit(CommandAPDU apdu){
+    public ResponseAPDU transmit(CommandAPDU apdu) throws Exception {
         try {
+            if(this.cardChannel == null){
+                throw new Exception("卡通道未打开");
+            }
             System.out.println("card channel object:" + this.cardChannel.hashCode());
             return this.cardChannel.transmit(apdu);
         } catch (CardException e) {
