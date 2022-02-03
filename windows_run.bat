@@ -1,1 +1,1 @@
-./jre1.8.0_66/bin/java java -jar web-nfc-1.0.2-jar-with-dependencies.jar
+javaw -jar web-nfc-1.0.2-jar-with-dependencies.jar
