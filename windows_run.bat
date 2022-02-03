@@ -1,1 +1,1 @@
-javaw -jar web-nfc-1.0.2-jar-with-dependencies.jar
+java -jar web-nfc-1.0.2-jar-with-dependencies.jar
