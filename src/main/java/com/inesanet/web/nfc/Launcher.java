@@ -26,7 +26,7 @@ public class Launcher {
 
     public static void main(String[] arg) throws Exception {
         System.out.println("version 1.0.2");
-        HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(8002), 0);
         System.out.println("监听8001端口");
         System.out.println("os.name:" + System.getProperty("os.name"));
         server.createContext("/reader", new ReaderHandler());
