@@ -26,6 +26,8 @@ public class Launcher {
 
     public static void main(String[] arg) throws Exception {
         HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
+        System.out.println("监听8001端口");
+        System.out.println("os.name:" + System.getProperty("os.name"));
         server.createContext("/reader", new ReaderHandler());
         server.start();
     }
@@ -121,6 +123,7 @@ public class Launcher {
                 }
             } catch (Exception e){
                 e.printStackTrace();
+                System.out.println("exception:" + e.getMessage());
                 Map<String,Object> tips = new HashMap<>();
                 tips.put("tips",e.getMessage());
                 fail(tips,exchange);
