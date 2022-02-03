@@ -24,7 +24,16 @@ import java.util.Map;
  */
 public class Launcher {
 
+    private static String port;
     public static void main(String[] arg) throws Exception {
+        System.out.println("version 1.0.2");
+        if(arg.length != 0){
+            System.out.println("com port:" + arg[0]);
+            port = arg[0];
+        } else {
+            System.out.println("com port:default");
+        }
+
         HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
         System.out.println("监听8001端口");
         System.out.println("os.name:" + System.getProperty("os.name"));
@@ -57,13 +66,17 @@ public class Launcher {
                             fail(tips,exchange);
                             return;
                         }
-                        System.out.println("os.name:" + System.getProperty("os.name"));
-                        if(System.getProperty("os.name").toLowerCase().startsWith("win")){
-                            System.out.println("selected card terminal:" + Constant.CARD_READER.allCardTerminals().get(0).getName());
-                            CardReader.getInstance().selectedCardTerminal(0);
+                        if(port != null && !"".equals(port)) {
+                            CardReader.getInstance().selectedCardTerminal(Integer.parseInt(port));
                         } else {
-                            System.out.println("selected card terminal:" + Constant.CARD_READER.allCardTerminals().get(1).getName());
-                            CardReader.getInstance().selectedCardTerminal(1);
+                            System.out.println("os.name:" + System.getProperty("os.name"));
+                            if(System.getProperty("os.name").toLowerCase().startsWith("win")){
+                                System.out.println("selected card terminal:" + Constant.CARD_READER.allCardTerminals().get(0).getName());
+                                CardReader.getInstance().selectedCardTerminal(0);
+                            } else {
+                                System.out.println("selected card terminal:" + Constant.CARD_READER.allCardTerminals().get(1).getName());
+                                CardReader.getInstance().selectedCardTerminal(1);
+                            }
                         }
                         int count = 0;
                         while (true){
