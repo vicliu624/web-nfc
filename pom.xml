@@ -7,6 +7,7 @@
     <groupId>com.inesanet</groupId>
     <artifactId>web-nfc</artifactId>
     <version>1.0.2</version>
+    <description>web-nfc</description>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
