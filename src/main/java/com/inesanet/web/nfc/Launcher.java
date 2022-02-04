@@ -86,7 +86,7 @@ public class Launcher {
                         CardReader.getInstance().getBasicChannel();
                         success(tips,exchange);
                         return;
-                    } else if("exec".toLowerCase().equals(attribute.toLowerCase())) {
+                    } else if("exec".equalsIgnoreCase(attribute)) {
                         try {
                             Map<String,Object> tips = new HashMap<>();
                             Map<String,String> respMap = new LinkedHashMap<>();
